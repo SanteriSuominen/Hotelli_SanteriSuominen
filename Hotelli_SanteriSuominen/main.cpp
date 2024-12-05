@@ -10,8 +10,11 @@ int main()
     Hotel hotel = Hotel();
 
     
-    
-        hotel.printRooms();
+    while (true)
+    {
+        //hotel.addReservation();
+        hotel.findReservation();
+    }
     
     
 }

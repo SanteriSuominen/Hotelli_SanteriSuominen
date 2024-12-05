@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <filesystem>
 
 class Hotel  // hotellin luokka
 {
@@ -39,7 +40,7 @@ public:
 	void init();
 	void addReservation();
 	void findReservation();
-	void removeReservation(const int index);
+	void removeReservation(const int index, const int identifier);
 	void printAllReservations();
 	void printRooms();
 };

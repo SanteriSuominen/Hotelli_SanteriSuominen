@@ -17,7 +17,6 @@ void Hotel::init()
 	this->reservations.push_back(Hotel::Reservation());
 }
 
-
 // Käyttöliittymän funktiot
 
 void Hotel::addReservation()
@@ -66,11 +65,14 @@ void Hotel::addReservation()
 		if (tempRoomNum > 300 || tempRoomNum <= 0)
 			continue;
 
+		
 		if (this->rooms[tempRoomNum - 1].isReserved)
 		{
 			std::cout << "Sorry, your selected room is taken.\n";
+			tempRoomNum = 0;
 			continue;
 		}
+		
 	}
 	float priceMulti = 0.0f;
 	std::random_device random;
@@ -97,7 +99,21 @@ void Hotel::addReservation()
 			i = 0;
 		}	
 	}
+	std::string fileName = std::to_string(tempIdentifier) + ".txt";
+	std::ofstream file(fileName);
+	
+	if (file.is_open())
+	{
+		file << tempName << "\n";
+		file << tempRoomNum << "\n";
+		file << tempNights << "\n";
+		file << tempPrice << "\n";
+		file << tempIdentifier << "\n";
+		file.close();
+	}
+
 	this->reservations.push_back(Hotel::Reservation(tempName, tempIdentifier, tempNights, tempRoomNum, tempPrice));
+	this->rooms[tempRoomNum-1].isReserved = true;
 	std::cout << "Your reservation is successful, with reservation number: " << tempIdentifier << std::endl;
 	std::cout << "Thank you we are waiting on your visit :)" << std::endl;
 }
@@ -170,18 +186,26 @@ void Hotel::findReservation()
 				{
 					this->printReservation(i);
 
-					std::cout << "Would you like to remove this reservation (y/n)";
+					std::cout << "Would you like to remove this reservation (y/n)" << std::endl;
 					std::string temp;
 					std::getline(std::cin, temp);
-
+					
+					std::cin >> temp;
 					while (temp != "y" || temp != "n")
 					{
-						std::cout << "Try again: ";
-						std::getline(std::cin, temp);
+						if (std::cin.fail())
+						{
+							std::cin.clear();
+							std::cin.ignore(INT_MAX, '\n');
+							std::cout << "try again: " << std::endl;
+							std::cin >> temp;
+						}
+						else
+							break;
 					}
 
 					if (temp == "y")
-						this->removeReservation(i);
+						this->removeReservation(i, this->reservations[i].identifier);
 
 					if (temp == "n")
 						return;
@@ -193,8 +217,17 @@ void Hotel::findReservation()
 	}
 }
 
-void Hotel::removeReservation(const int index)
-{
+void Hotel::removeReservation(const int index, const int identifier)
+{	
+	this->reservations.erase(this->reservations.begin() + index);
+
+	std::string fileName = std::to_string(identifier) + ".txt";
+	if (std::filesystem::exists(fileName)) 
+	{
+		std::filesystem::remove(fileName);
+		std::cout << "File " << fileName << " removed successfully.\n";
+	}
+	return;
 }
 
 void Hotel::printAllReservations()
@@ -242,6 +275,41 @@ void Hotel::printHeader()
 
 void Hotel::loadReservations()
 {
+	std::string tempName = "";
+	int tempIdentifier = 0, tempNights = 0, tempRoomNum = 1;
+	float tempPrice = 0;
+	for (int i = 10000; i < 100000; i++)
+	{
+		std::string fileName = std::to_string(i) + ".txt";
+		if (std::filesystem::exists(fileName))
+		{
+			std::ifstream file(fileName);
+			std::string line1, line2, line3, line4, line5;
+
+
+			// Read the lines from the file
+			if (std::getline(file, line1)) {
+				tempName = line1;
+			}
+			if (std::getline(file, line2)) {
+				tempRoomNum = std::stoi(line2);
+			}
+			if (std::getline(file, line3)) {
+				tempNights = std::stoi(line3);
+			}
+			if (std::getline(file, line4)) {
+				tempPrice = std::stof(line4);
+			}
+			if (std::getline(file, line5)) {
+				tempIdentifier = std::stoi(line5);
+			}
+
+			// Add the reservation to the list
+			this->reservations.push_back(Hotel::Reservation(tempName, tempIdentifier, tempNights, tempRoomNum, tempPrice));
+			this->rooms[tempRoomNum - 1].isReserved = true;
+			file.close();
+		}
+	}
 }
 
 void Hotel::generateRooms()
