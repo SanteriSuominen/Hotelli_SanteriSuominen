@@ -29,6 +29,7 @@ private:
 	void printHeader();
 	void loadReservations();
 	void generateRooms();
+	void printReservation(const int index);
 	Room rooms[300]; // array huoneista joita on 300
 	std::vector<Reservation> reservations{}; // lista varauksista jonka kokonaism‰‰r‰‰ ei tiedet‰ siksi vector
 public:
@@ -36,10 +37,9 @@ public:
 	~Hotel();
 
 	void init();
-
 	void addReservation();
 	void findReservation();
-	void removeReservation();
-	void printReservation();
+	void removeReservation(const int index);
+	void printAllReservations();
 	void printRooms();
 };
