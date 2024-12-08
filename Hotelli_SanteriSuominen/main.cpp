@@ -2,40 +2,11 @@
 #include <fstream>
 #include <string>
 #include "Hotel.h"
-
+// mainiss‰ ei muuta tarvitse kutsua kuin hotel classia ja sielt‰ process funktio jossa on main logiikka
 int main()
 {
+    Hotel hotel = Hotel(); // luodaan hotelli ohjelma
     
-
-    Hotel hotel = Hotel();
-
-    
-    while (true)
-    {
-        //hotel.addReservation();
-        hotel.findReservation();
-    }
-    
-    
+    hotel.process(); // k‰ynnistett‰‰n hotelli ohjelma
+    return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 300 huonetta 0-150 1hh ja 150 - 300 2hh a
