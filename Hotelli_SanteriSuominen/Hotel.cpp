@@ -223,12 +223,12 @@ void Hotel::findReservation()		// etsitään tehty varaus ja jatko toimenpiteet
 		{
 			if (tempName == this->reservations[i].name || tempRoomNum == this->reservations[i].roomNumber || tempIdNum == this->reservations[i].identifier)
 			{
-				std::cout << "Reservation found." << std::endl;
+				std::cout << "\nSReservation found.\n" << std::endl;
 				this->printReservation(i);
 				found = true;
 				if (tempName == "null_no_search") // Huom käyttäjä voi löytää varauksen nimellä mutta ei poistaa sitä sillä nimellä voi olla useampi varaus jolloin ohjelma kehottaa hakemaan identifierilla tai huone numerolla
 				{
-					std::cout << "Would you like to remove this reservation (y/n)" << std::endl; // haluakko poistaa varauksen
+					std::cout << "\nWould you like to remove this reservation (y/n)" << std::endl; // haluakko poistaa varauksen
 					std::string temp = "";
 
 					while (temp != "y" && temp != "n")
